@@ -1,0 +1,48 @@
+{
+  "name": "runga",
+  "version": "0.0.0-development",
+  "description": "Runga is a library for rendering dynamic 2d scenes on canvas",
+  "keywords": [
+    "canvas",
+    "drawing",
+    "animation"
+  ],
+  "homepage": "https://github.com/yetihead/runga",
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "browser": "./dist/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "vitest",
+    "build": "rm -rf ./dist && tsc",
+    "pretty": "npx pretty-quick --staged",
+    "semantic-release": "semantic-release"
+  },
+  "author": "yetibrain@yandex.ru",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yetihead/runga.git"
+  },
+  "devDependencies": {
+    "happy-dom": "^12.9.1",
+    "prettier": "^2.8.8",
+    "pretty-quick": "^3.1.3",
+    "semantic-release": "^22.0.6",
+    "simple-git-hooks": "^2.8.1",
+    "typescript": "^5.1.6",
+    "vitest": "^0.34.6"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": true
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npm run pretty"
+  }
+}
