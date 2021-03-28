@@ -49,7 +49,8 @@ export class Layer<Data extends object> extends BaseCanvas {
 			this.append(...childNodes);
 		}
 
-		this._onChildrenRenderRequest(() => {
+		this._onChildrenRenderRequest((e) => {
+			e.stopPropagation();
 			this._requestRender();
 		});
 	}
