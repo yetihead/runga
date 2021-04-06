@@ -26,20 +26,23 @@ export abstract class BaseCanvas extends ExtendableHTMLCanvasElement {
 		}
 
 		const children2dContext = this._childrenCanvas.getContext('2d');
-		children2dContext.clearRect(0, 0, this._childrenCanvas.width, this._childrenCanvas.height);
-
-		this.childNodes.forEach((node) => {
-			if (node instanceof BaseCanvas) {
-				node.render({size, isForceRender});
-				children2dContext.drawImage(node, 0, 0);
-			}
-		});
+		if (children2dContext) {
+			children2dContext.clearRect(0, 0, this._childrenCanvas.width, this._childrenCanvas.height);
+			this.childNodes.forEach((node) => {
+				if (node instanceof BaseCanvas) {
+					node.render({size, isForceRender});
+					children2dContext.drawImage(node, 0, 0);
+				}
+			});
+		}
 	}
 
-	protected _renderFunction({selfCanvas, childrenCanvas}: RenderFunctionParams) {
+	protected _renderFunction({selfCanvas, childrenCanvas}: RenderFunctionParams): any {
 		const ctx = selfCanvas.getContext('2d');
-		ctx.clearRect(0, 0, selfCanvas.width, selfCanvas.height);
-		ctx.drawImage(childrenCanvas, 0, 0);
+		if (ctx) {
+			ctx.clearRect(0, 0, selfCanvas.width, selfCanvas.height);
+			ctx.drawImage(childrenCanvas, 0, 0);
+		}
 	}
 
 	protected _onChildrenRenderRequest(handler: (e: Event) => void) {

@@ -1,13 +1,18 @@
 import {BaseCanvas} from './base-canvas';
 import {syncSize} from './sync-size';
+import {isPromise} from './is-promise';
 import {RENDER_REQUEST_EVENT_NAME} from './constants';
 import {RenderParams} from './types';
 
-type RenderFunction<Data extends object> = (params: {
-	data: Data;
+type RenderFunctionResultType<Data extends object> = undefined|Partial<Data>|Promise<Partial<Data>>;
+
+type RenderFunctionParams<Data extends object> = {
+	data: Partial<Data>;
 	selfCanvas: HTMLCanvasElement;
 	childrenCanvas: HTMLCanvasElement;
-}) => void;
+};
+
+type RenderFunction<Data extends object> = (params: RenderFunctionParams<Data>) => RenderFunctionResultType<Data>;
 
 type Params<Data extends object> =
 	[RenderFunction<Data>]|
@@ -21,13 +26,13 @@ type Params<Data extends object> =
 export class Layer<Data extends object> extends BaseCanvas {
 	private _hasRequestedRender = true;
 	private _isFirstRender = true;
-	private _data: Data;
+	private _data: Partial<Data> = {};
 
 	constructor(...params: Params<Data>) {
 		super();
 
-		let renderFunction: RenderFunction<Data>;
-		let childNodes: HTMLCanvasElement[];
+		let renderFunction: RenderFunction<Data>|undefined;
+		let childNodes: HTMLCanvasElement[]|undefined;
 
 		switch (params.length) {
 			case 1:
@@ -54,6 +59,10 @@ export class Layer<Data extends object> extends BaseCanvas {
 			this._requestRender();
 		});
 	}
+
+	protected _renderFunction(params: RenderFunctionParams<Data>) {
+		return super._renderFunction.call(this, params);
+	};
 
 	private _requestRender() {
 		this._hasRequestedRender = true;
@@ -83,11 +92,24 @@ export class Layer<Data extends object> extends BaseCanvas {
 
 		if (needToRedraw || this._hasRequestedRender) {
 			this._hasRequestedRender = false;
-			this._renderFunction.call(undefined, {
+			const result: RenderFunctionResultType<Data> = this._renderFunction.call(undefined, {
 				data: this._data,
 				selfCanvas: this,
 				childrenCanvas: this._childrenCanvas
 			});
+
+			if (!result) {
+				return;
+			}
+
+			if (isPromise(result)) {
+				// @ts-ignore
+				result.then((data) => this.setData(data));
+				return;
+			}
+
+			// @ts-ignore
+			this.setData(result);
 		}
 	}
 }

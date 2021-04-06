@@ -1,10 +1,11 @@
 {
   "name": "runga",
   "version": "1.0.0",
-  "description": "Library for rendering dinamic 2d scenes on canvas",
+  "description": "Library for rendering dynamic 2d scenes on canvas",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf ./dist && tsc"
   },
   "author": "yetibrain@yandex.ru",
   "license": "MIT",

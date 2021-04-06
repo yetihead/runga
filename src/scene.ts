@@ -1,6 +1,6 @@
 import {BaseCanvas} from './base-canvas';
 import {Layer} from './layer';
-import {RenderParams} from './types';
+import {RenderParams, Size} from './types';
 
 /**
  * Scene is top-level entity of scene structure.
@@ -17,11 +17,6 @@ export class Scene extends BaseCanvas {
 			this._scheduleRender();
 		});
 
-		this.addEventListener('resize', () => {
-			this._renderWithResize = true;
-			this._scheduleRender();
-		});
-
 		if (childNodes) {
 			this.append(...childNodes);
 		}
@@ -35,23 +30,32 @@ export class Scene extends BaseCanvas {
 		});
 	}
 
-	private _scheduleRender() {
+	setSize({width, height}: Size) {
+		this.width = width;
+		this.height = height;
+
+		this._scheduleRender(true);
+	}
+
+	private _scheduleRender(widthResize?: boolean) {
+		if (widthResize) {
+			this._renderWithResize = true;
+		}
+
 		if (this._renderHasScheduled) {
 			return;
 		}
 
 		this._renderHasScheduled = true;
 
-		const renderParams = {
-			size: {
-				width: this.width,
-				height: this.height
-			},
-			isForceRender: this._renderWithResize
-		};
-
 		requestAnimationFrame(() => {
-			this.render(renderParams);
+			this.render({
+				size: {
+					width: this.width,
+					height: this.height
+				},
+				isForceRender: this._renderWithResize
+			});
 			this._renderWithResize = false;
 			this._renderHasScheduled = false;
 		});
