@@ -3,11 +3,11 @@ import {Layer} from './layer';
 import {RenderParams, Size} from './types';
 
 /**
- * Scene is top-level entity of scene structure.
- * Scene must contain one layer at least
+ * Scene is top-level entity of Runga scene structure.
+ * Scene must contain one layer at least.
  */
 export class Scene extends BaseCanvas {
-	private _renderHasScheduled: boolean = false;
+	private _renderingHasScheduled: boolean = false;
 	private _renderWithResize: boolean = true;
 
 	constructor(childNodes?: Layer<object>[]) {
@@ -30,6 +30,12 @@ export class Scene extends BaseCanvas {
 		});
 	}
 
+	/**
+	 * Use this method instead properies `width` and `height`
+	 * to change size of all canvas of the scene
+	 * @param {number} width
+	 * @param {number} height
+	 */
 	setSize({width, height}: Size) {
 		this.width = width;
 		this.height = height;
@@ -42,11 +48,11 @@ export class Scene extends BaseCanvas {
 			this._renderWithResize = true;
 		}
 
-		if (this._renderHasScheduled) {
+		if (this._renderingHasScheduled) {
 			return;
 		}
 
-		this._renderHasScheduled = true;
+		this._renderingHasScheduled = true;
 
 		requestAnimationFrame(() => {
 			this.render({
@@ -57,7 +63,7 @@ export class Scene extends BaseCanvas {
 				isForceRender: this._renderWithResize
 			});
 			this._renderWithResize = false;
-			this._renderHasScheduled = false;
+			this._renderingHasScheduled = false;
 		});
 	}
 }

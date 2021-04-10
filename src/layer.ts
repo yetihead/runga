@@ -4,7 +4,7 @@ import {isPromise} from './is-promise';
 import {RENDER_REQUEST_EVENT_NAME} from './constants';
 import {RenderParams} from './types';
 
-type RenderFunctionResultType<Data extends object> = undefined|Partial<Data>|Promise<Partial<Data>>;
+type RenderFunctionResultType<Data extends object> = void|Partial<Data>|Promise<Partial<Data>>;
 
 type RenderFunctionParams<Data extends object> = {
 	data: Partial<Data>;
