@@ -1,8 +1,9 @@
 {
   "name": "runga",
   "version": "1.0.0",
-  "description": "Library for rendering dynamic 2d scenes on canvas",
-  "main": "index.js",
+  "description": "Runga is a library for rendering dynamic 2d scenes on canvas",
+  "homepage": "https://github.com/yetihead/runga",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -rf ./dist && tsc"

@@ -1,7 +1,6 @@
 import {ExtendableHTMLCanvasElement} from './extendable-html-canvas-element';
 import {syncSize} from './sync-size';
 import {RenderParams} from './types';
-import {RENDER_REQUEST_EVENT_NAME} from './constants';
 
 type RenderFunctionParams = {
 	selfCanvas: HTMLCanvasElement;
@@ -18,6 +17,20 @@ export abstract class BaseCanvas extends ExtendableHTMLCanvasElement {
 	constructor() {
 		super();
 		this._childrenCanvas = document.createElement('canvas');
+	}
+
+	requestRender() {
+		const parent = this.parentElement;
+
+		if (!parent) {
+			return;
+		}
+
+		this._onRequestRender();
+
+		if (parent instanceof BaseCanvas) {
+			parent.requestRender();
+		}
 	}
 
 	protected _renderChildren({size, isForceRender}: RenderParams) {
@@ -45,15 +58,7 @@ export abstract class BaseCanvas extends ExtendableHTMLCanvasElement {
 		}
 	}
 
-	protected _onChildrenRenderRequest(handler: (e: Event) => void) {
-		this.addEventListener(RENDER_REQUEST_EVENT_NAME, (e) => {
-			if (e.target === this) {
-				return;
-			}
-
-			handler(e);
-		});
-	}
+	protected abstract _onRequestRender(): void;
 
 	abstract render(params: RenderParams): void;
 }

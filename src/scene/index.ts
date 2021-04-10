@@ -1,6 +1,9 @@
-import {BaseCanvas} from './base-canvas';
-import {Layer} from './layer';
-import {RenderParams, Size} from './types';
+import {Layer} from '../layer';
+import {
+	BaseCanvas,
+	RenderParams,
+	Size
+} from '../base-canvas';
 
 /**
  * Scene is top-level entity of Runga scene structure.
@@ -13,13 +16,15 @@ export class Scene extends BaseCanvas {
 	constructor(childNodes?: Layer<object>[]) {
 		super();
 
-		this._onChildrenRenderRequest(() => {
-			this._scheduleRender();
-		});
-
 		if (childNodes) {
 			this.append(...childNodes);
 		}
+
+		this.scheduleRender();
+	}
+
+	protected _onRequestRender() {
+		this.scheduleRender();
 	}
 
 	render(params: RenderParams) {
@@ -40,10 +45,15 @@ export class Scene extends BaseCanvas {
 		this.width = width;
 		this.height = height;
 
-		this._scheduleRender(true);
+		this.scheduleRender(true);
 	}
 
-	private _scheduleRender(widthResize?: boolean) {
+	/**
+	 * Schedule rendering the next frame
+	 * @param {boolean} widthResize - reset size to all children
+	 * @returns 
+	 */
+	scheduleRender(widthResize?: boolean) {
 		if (widthResize) {
 			this._renderWithResize = true;
 		}
@@ -55,15 +65,16 @@ export class Scene extends BaseCanvas {
 		this._renderingHasScheduled = true;
 
 		requestAnimationFrame(() => {
+			const isForceRender = this._renderWithResize;
+			this._renderWithResize = false;
+			this._renderingHasScheduled = false;
 			this.render({
 				size: {
 					width: this.width,
 					height: this.height
 				},
-				isForceRender: this._renderWithResize
+				isForceRender
 			});
-			this._renderWithResize = false;
-			this._renderingHasScheduled = false;
 		});
 	}
 }

@@ -1,23 +1,17 @@
-import {BaseCanvas} from './base-canvas';
-import {syncSize} from './sync-size';
 import {isPromise} from './is-promise';
-import {RENDER_REQUEST_EVENT_NAME} from './constants';
-import {RenderParams} from './types';
 
-type RenderFunctionResultType<Data extends object> = void|Partial<Data>|Promise<Partial<Data>>;
+import {
+	BaseCanvas,
+	syncSize,
+	RenderParams
+} from '../base-canvas';
 
-type RenderFunctionParams<Data extends object> = {
-	data: Partial<Data>;
-	selfCanvas: HTMLCanvasElement;
-	childrenCanvas: HTMLCanvasElement;
-};
-
-type RenderFunction<Data extends object> = (params: RenderFunctionParams<Data>) => RenderFunctionResultType<Data>;
-
-type Params<Data extends object> =
-	[RenderFunction<Data>]|
-	[HTMLCanvasElement[]]|
-	[RenderFunction<Data>, HTMLCanvasElement[]]
+import {
+	RenderFunction,
+	RenderFunctionParams,
+	RenderFunctionResult,
+	ConstructorParams
+} from './types';
 
 /**
  * Layer of a scene can contain othe child layers
@@ -28,7 +22,7 @@ export class Layer<Data extends object> extends BaseCanvas {
 	private _isFirstRender = true;
 	private _data: Partial<Data> = {};
 
-	constructor(...params: Params<Data>) {
+	constructor(...params: ConstructorParams<Data>) {
 		super();
 
 		let renderFunction: RenderFunction<Data>|undefined;
@@ -53,23 +47,15 @@ export class Layer<Data extends object> extends BaseCanvas {
 		if (childNodes) {
 			this.append(...childNodes);
 		}
+	}
 
-		this._onChildrenRenderRequest((e) => {
-			e.stopPropagation();
-			this._requestRender();
-		});
+	protected _onRequestRender() {
+		this._hasRequestedRender = true;
 	}
 
 	protected _renderFunction(params: RenderFunctionParams<Data>) {
 		return super._renderFunction.call(this, params);
 	};
-
-	private _requestRender() {
-		this._hasRequestedRender = true;
-		this.dispatchEvent(
-			new CustomEvent(RENDER_REQUEST_EVENT_NAME, {bubbles: true})
-		);
-	}
 
 	setData(data: Partial<Data>) {
 		this._data = {
@@ -77,7 +63,7 @@ export class Layer<Data extends object> extends BaseCanvas {
 			...data
 		};
 
-		this._requestRender();
+		this.requestRender();
 	}
 
 	render({size, isForceRender}: RenderParams) {
@@ -92,7 +78,7 @@ export class Layer<Data extends object> extends BaseCanvas {
 
 		if (needToRedraw || this._hasRequestedRender) {
 			this._hasRequestedRender = false;
-			const result: RenderFunctionResultType<Data> = this._renderFunction.call(undefined, {
+			const result: RenderFunctionResult<Data> = this._renderFunction.call(undefined, {
 				data: this._data,
 				selfCanvas: this,
 				childrenCanvas: this._childrenCanvas
