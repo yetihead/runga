@@ -1,8 +1,6 @@
 # Runga
 Runga is a zero dependency library for rendering dynamic 2d scenes on html canvas. The library makes it possible to code layers of scene separatly from each other.
 
-### Runga has zero dependencies.
-
 
 ## Install
 ```bash

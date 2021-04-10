@@ -20,11 +20,11 @@ export class Scene extends BaseCanvas {
 			this.append(...childNodes);
 		}
 
-		this.scheduleRender();
+		this._scheduleRender();
 	}
 
 	protected _onRequestRender() {
-		this.scheduleRender();
+		this._scheduleRender();
 	}
 
 	render(params: RenderParams) {
@@ -45,7 +45,7 @@ export class Scene extends BaseCanvas {
 		this.width = width;
 		this.height = height;
 
-		this.scheduleRender(true);
+		this._scheduleRender(true);
 	}
 
 	/**
@@ -53,7 +53,7 @@ export class Scene extends BaseCanvas {
 	 * @param {boolean} widthResize - reset size to all children
 	 * @returns 
 	 */
-	scheduleRender(widthResize?: boolean) {
+	private _scheduleRender(widthResize?: boolean) {
 		if (widthResize) {
 			this._renderWithResize = true;
 		}
