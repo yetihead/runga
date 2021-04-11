@@ -1,2 +1,2 @@
-export {Layer} from './layer';
-export {Scene} from './scene';
+export { Layer } from './layer';
+export { Scene } from './scene';

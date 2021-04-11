@@ -10,7 +10,23 @@
   },
   "author": "yetibrain@yandex.ru",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yetihead/runga.git"
+  },
   "devDependencies": {
+    "prettier": "^2.2.1",
+    "pretty-quick": "^3.1.0",
+    "simple-git-hooks": "^2.3.1",
     "typescript": "^4.2.3"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": true
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pretty-quick --staged"
   }
 }

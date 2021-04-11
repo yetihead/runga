@@ -5,15 +5,15 @@
  *
  * You can extend this class, which creates canvas by using 'document.createElement()' under the hood
  */
-export const ExtendableHTMLCanvasElement = (function() {
-	function ExtendableHTMLCanvasElement (this: object) {
-		const thisNode = document.createElement('CANVAS');
-		Object.setPrototypeOf(thisNode, Object.getPrototypeOf(this));
-		return thisNode;
-	};
+export const ExtendableHTMLCanvasElement = (function () {
+  function ExtendableHTMLCanvasElement(this: object) {
+    const thisNode = document.createElement('CANVAS');
+    Object.setPrototypeOf(thisNode, Object.getPrototypeOf(this));
+    return thisNode;
+  }
 
-	ExtendableHTMLCanvasElement.prototype = HTMLCanvasElement.prototype;
+  ExtendableHTMLCanvasElement.prototype = HTMLCanvasElement.prototype;
 
-	// @ts-ignore
-	return ExtendableHTMLCanvasElement as typeof HTMLCanvasElement
+  // @ts-ignore
+  return ExtendableHTMLCanvasElement as typeof HTMLCanvasElement;
 })();
