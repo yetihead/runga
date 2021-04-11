@@ -6,7 +6,8 @@
   "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf ./dist && tsc"
+    "build": "rm -rf ./dist && tsc",
+    "pretty": "npx pretty-quick --staged"
   },
   "author": "yetibrain@yandex.ru",
   "license": "MIT",
@@ -27,6 +28,6 @@
     "singleQuote": true
   },
   "simple-git-hooks": {
-    "pre-commit": "pretty-quick --staged"
+    "pre-commit": "npm run pretty"
   }
 }
