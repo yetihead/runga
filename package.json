@@ -5,7 +5,7 @@
   "homepage": "https://github.com/yetihead/runga",
   "main": "./dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "build": "rm -rf ./dist && tsc",
     "pretty": "npx pretty-quick --staged"
   },
@@ -16,9 +16,14 @@
     "url": "https://github.com/yetihead/runga.git"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.22",
+    "babel-jest": "^26.6.3",
+    "jest": "^26.6.3",
     "prettier": "^2.2.1",
     "pretty-quick": "^3.1.0",
     "simple-git-hooks": "^2.3.1",
+    "ts-jest": "^26.5.5",
+    "ts-node": "^9.1.1",
     "typescript": "^4.2.3"
   },
   "prettier": {
@@ -29,5 +34,6 @@
   },
   "simple-git-hooks": {
     "pre-commit": "npm run pretty"
-  }
+  },
+  "dependencies": {}
 }
