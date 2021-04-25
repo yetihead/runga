@@ -35,7 +35,7 @@ describe('ExtendableHTMLCanvasElement', () => {
     const instance = new ExtendableHTMLCanvasElement();
 
     expect(
-      ExtendableHTMLCanvasElement.prototype !== Object.getPrototypeOf(instance)
+      ExtendableHTMLCanvasElement.prototype === Object.getPrototypeOf(instance)
     ).toBeTruthy();
 
     spy.mockClear();
